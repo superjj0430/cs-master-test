@@ -226,3 +226,60 @@ RAID（Redundant Array of Independent Disks）是一种通过将多个硬盘驱�
 •	RAID 3： 字节级条带化，带奇偶校验，通过奇偶校验信息在单个硬盘故障时进行数据恢复，适用于大块数据的读操作。
 •	RAID 4： 块级条带化，带奇偶校验，类似于 RAID 3，但是数据和奇偶校验信息存储在不同的硬盘上，适用于大块数据的读操作，对随机写操作性能较差。
 
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+deadlock
+定義:是指两个或多个进程（线程）互相等待对方释放资源才能继续执行的状态。在死锁状态下，进程无法继续运行，导致系统停滞
+特性:
+1. mutual exclusion: 一次只有一個process可以使用資源
+2. hold & wait: 一個process持有某些資源且等大其他process擁有的資源
+3. no preemption: 資源只能被持有的process自己放棄，其他process無法搶占
+4. circular wait: 環狀等待
+
+解決方法:
+Deadlock Prevention: 確保 deadlock 不會發生 => 4 個條件其中一個不成立
+Mutual exclusion:
+對 sharable resources 而言，Mutual exclusion 一定成立
+而 nonsharable resources，因為可以同時讀取相同檔案，所以一定不會產生
+但很困難讓他不成立
+
+Hold and Wait:
+process 必須保證一個行程在要求一項資源時，不可以佔用任何其它的資源
+兩種可能策略
+允許 process 在執行之初可先持有部分資源，一旦要申請新資源，則必須先釋放持有的全部資源，才可以提申請
+除非 process 可以一次取得完成工作所需的全部資源，才允許 process 持有資源，否則不准持有任何資源
+低資源利用率
+可能會有 starvation
+
+No preemption:
+變成 preemption
+process 可以搶奪 waiting process 所持有的 Resource
+解決：採取類似”Aging”技術(將被搶奪的次數，列為提高優先權之依據)
+
+Circular Wait:
+確保循環式等候的條件不成立，我們對所有的資源型式強迫安排一個線性的順序
+作法
+給予每個 Resource 唯一的(unique)資源編號(ID)
+規定 process 需依資源編號遞增的方式提出申請
+優點:保證系統絕不會有死結存在
+
+Deadlock Avoidance
+當 process 提資源申請(Request)時，則 OS 需依據下列資訊：
+
+系統目前可用的資源數量(Available)
+各 process 對資源的最大需求量(max)
+各 process 目前持有的資源量(allocation) 各系統還需多少資源(need) = max - allocation
+執行 Banker’s Algorithm(內含 Safety Algorithm)判斷系統若核准後，是否處於 Safe state，若是，則核准申請，否則(處於 unsafe state)，則否決此次申請，Process 則等待依段時間後再重新申請
+
+缺點:resource 可用率低、throughput 低
+
+
+deadlock detection
+偵測死結是否存在 若死結存在，則必須打破死結，恢復正常的機制
+
+優點：resource utilization 較高，Throughput 高
+缺點：cost 太高
