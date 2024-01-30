@@ -17,4 +17,41 @@ POS
 卡諾圖m編號位置
 
 邏輯閘
+NOT 遇1則0 遇0則1
+OR 遇1則1 輸入都為0為0
+AND 遇0則0 輸入都是1為1
+
+XOR 輸入的1為奇數 為1
+ex:
+input_a input_b output_x
+0        0        0
+1        0        1
+0        1        1
+1        1        0
+
+NOR 為OR的相反，遇1則0 所有輸入為0時為1
+ex: 
+input_a input_b output_x or的輸出
+0        0        1        0
+1        0        0        1
+0        1        0        1
+1        1        0        1
+
+NAND 為AND的相反 遇0則1 所有輸入為1時為0
+input_a input_b output_x and的輸出
+0        0        1        0
+1        0        1        0
+0        1        1        0
+1        1        0        1
+
+XNOR XOR的相反 輸入1的數量為偶數時為1 否則為0
+input_a input_b output_x and的輸出
+0        0        1        0
+1        0        0        1
+0        1        0        1
+1        1        1        0
+
+
+
+
 
