@@ -287,9 +287,191 @@ deadlock detection
 
 作業系統型態　http://debussy.im.nuu.edu.tw/sjchen/OS/97Spring/Ch_1.pdf
 1. batch system
-定義：　批处理是指用户将一批作业提交给操作系统后就不再干预，由操作系统控制它们自动运行。这种采用批量处理作业技术的操作系统称为批处理操作系统；批处理操作系统不具有交互性，它是为了提高CPU的利用率而提出的一种操作系统
+將相同或類似的工作整批集中處理，並於完成後全部送回，無法與使用者互動，通常為自動化程式
+通常為離線作業，非急迫且週期性的工作
 
-特色：　多道：在内存中同时存放多个作业，一个时刻只有一个作业运行，这些作业共享CPU和外部设备等资源。
-成批：用户和他的作业之间没有交互性。用户自己不能干预自己的作业的运行，发现作业错误不能及时改正。
-批处理系统的目的是提高系统吞吐量和资源的利用率。
-多道处理系统的优点是由于系统资源为多个作业所共享，其工作方式是作业之间自动调度执行。并在运行过程中用户不干预自己的作业，从而大大提高了系统资源的利用率和作业吞吐量。其缺点是无交互性，用户一旦提交作业就失去了对其运行的控制能力，而且是批处理的，作业周转时间长，用户使用不方便
+2. multiprogramming
+通時運行多個程序，程序為在cpu上交替運行一段時間，透過快速切換來實現同時運行多個程序
+
+3.mutlliprocessing
+同時在多個處理器上運行程序，每個處理器都有自己的cpu與memory，可獨立並行執行任務
+Symmetric(對稱): 每個處理器功能相同
+Asymmetric(非對稱): 功能不同
+
+Note: 處理系統區別在於它使用多個獨立的處理器，每個處理器都能執行自己的指令和程序，而多程式系統僅使用一個處理器以分時方式執行多個程序
+
+4. time sharing
+Time-sharing（分時系統）和Multiprogramming（多程式系統）是兩種不同的作業系統技術，它們有著以下主要差異：
+
+執行概念：
+
+Time-sharing：分時系統允許多個用戶共享單個計算機系統，每個用戶都獲得較小的時間片來使用CPU，以達到同時多用戶執行程序的效果。
+Multiprogramming：多程式系統允許同時運行多個程序，但一次只有一個程序使用CPU。程序之間通過快速切換（稱為上下文切換）來共享CPU資源。
+優先級和時間分配：
+
+Time-sharing：分時系統根據不同的優先級分配時間片給每個用戶，通常較高優先級的用戶獲得更長的時間片，而低優先級的用戶獲得較短的時間片。
+Multiprogramming：多程式系統通常使用循環方式分配處理時間給不同程序，每個程序獲得固定的時間片，當時間片用完後，CPU切換到下一個程序。
+資源共享和效能：
+
+Time-sharing：分時系統主要關注多用戶之間的資源共享和服務品質（如響應時間），並根據優先級和時間片進行調度，以提供良好的用戶體驗。
+Multiprogramming：多程式系統更注重資源的最大利用和效能，通過在不同程序之間快速切換以提高CPU利用率，並通過同時執行多個程序來提高時間利用率。
+
+5.distributed system
+透過網路將分散在不同地方的處理器串聯，分為peer to peer與主從式架構
+Hadoop spark
+
+6.real-time system
+因對速度講究，輔助的儲存媒體很少用(vitual memory)，大部分程式儲存於ROM(READ ONLY MEMORY)
+
+
+
+
+
+
+
+
+
+改善CPU閒置的方法
+1.	OFFLINE
+用TAPE做媒介，CPU可同時做INPUT OUTPUT
+
+2.	BUFFERING
+Input: 避免cpu直接面對memory，用memory做媒介
+Output: 避免cpu直接面對printer，用memory做媒介
+Note:
+i/o bound: 執行速度受限於i/o device，需大量i/o作業及少量cpu運算
+cpu bonud: 執行速度受限於CPU，需大量CPU運算作業及少量i/o作業
+
+3.	SPOOLING
+Input: 避免cpu直接面對tape，用disk做媒介
+Output: 避免cpu直接面對printer，用disk做媒介
+優點:
+Io與cpu可同時運行
+效率更高
+可遠端io運作
+
+Note: spooling與buffer不同處
+Buffering（緩衝）：
+
+定義：Buffering是一種將數據暫時存儲在緩衝區中的技術，以平衡不同組件的處理速度。當數據流向不同的組件時，緩衝區可以用來調節數據的傳送速率，以確保數據在組件之間以恰當的速度傳輸。
+差別：Buffering用於調節或平衡數據流之間速度不匹配的情況。它可以在數據的傳輸過程中使用緩衝區暫時存儲數據，以便在接收方準備好之前保持數據的完整性和連續性。
+Spooling（排隊處理）：
+
+定義：Spooling是一種將數據、作業或其他任務暫存到磁盤或其他存儲設備的技術。它將多個不同的數據源或作業組合成一個共享的佇列，並按順序或優先級從佇列中進行處理。
+差別：Spooling主要用於解決在多個輸入源和輸出源之間的競爭和衝突問題。它將不同來源的數據或作業暫時存儲在共享的佇列中，然後按照順序或優先級將它們送到目的地進行處理。
+
+
+4.	CACHING
+將經常使用的data儲存於cache memory中
+
+快取記憶體寫回策略
+Write through: cpu寫資料回快取，同時寫回memory
+資料有一致性，但因要寫回mem所以速度較慢
+Write back: cpu把寫回memory的動作延遲，指修正快取中的資料，一段時間後再寫回memory
+速度快，但有可能出現資料不一致的現象
+
+
+
+i/o處理方式
+透過system call(monitor call)觸發中斷
+硬體產生的中斷:interrupt
+軟體: trap
+觸發時系統會進入monitor mode
+
+Polling：CPU設定I/O命令後，會步算監測I/O運作的STATUS，效率差
+Interrupt-driven I/O：CPU與I/O可同時運作，當I/O完成時發出I/O COMPLETE中斷通知OS，OS收到INTERRUPT後暫停目前工作執行ISR轉移資料至memory
+DMA(Direct Memory Access)：由i/o device controller負責memory與i/o之間資料傳輸，cpu無須參與，透過cycle stealing，cpu 與 dma controller可同時運作
+
+
+Command Interpreter 命令直譯器
+Def: 接收 user 輸入命令, 加以判別：
+正確 => 呼叫對應的 “Command procedure”
+不正確 => Output error
+分為:
+Intergrated part of O.S. => command procedure 整合到 O.S. 之中
+優點：速度快 (因為所有 command procedure 已於 O.S., 故在 Monitor Area (Memory) 之中)
+缺點：可擴充性低 (彈性差)
+Isolated part of O.S. => 將 command procedure 獨立於 O.S. 之外
+優點：可擴充性佳 (彈性好)
+缺點：速度較慢 (因為可能需做 I/O <-> Memory 的傳輸)
+
+
+
+System call（系統呼叫）是一種在作業系統中使用的機制，它允許用戶程序與作業系統進行交互和訪問作業系統提供的服務或功能。當用戶程序需要執行特權操作或訪問受保護的資源時，它必須通過系統呼叫來執行這些操作。
+
+Kernel 核心程式
+負責多個 process 運作上的協調, 管理等
+負責底層 Hardware 資源的分配及管理
+分為：巨核心 和 微核心(unix)
+
+Virtual Machine 虛擬機器
+Def: 藉由模擬技術, 創造一份與底層硬體完全一致的 copy (複製), 以達 Virtual Machine 之效
+可利用資源共享的技術產生許多 Virtual Machine:
+CPU Scheduling => 共享 CPU
+用 “Virtual Memory” => 共享 Memory Space
+用 Spooling => 共用 I/O Device
+優缺:安全、適合開發測試 / 製作難、系統間溝通困難
+
+java garabage collection: 對於不再被物件使用的記憶體重新取回並交還給系統
+
+
+
+Program 意旨軟體工程師在 IDE、editor等所寫的程式碼(code)，也就是說還尚未load入記憶體的 code，我們稱之為Program
+
+Process 意旨已經執行並且 load 到記憶體中的 Program ，程序中的每一行程式碼隨時都有可能被CPU執行
+以下條列幾點 Process 的觀念 —
+
+Process 是電腦中已執行 Program 的實體。
+每一個 Process 是互相獨立的。
+Process 本身不是基本執行單位，而是 Thread (執行緒)的容器。
+Process 需要一些資源才能完成工作，如 CPU、記憶體、檔案以及I/O裝置。
+
+thread 在同一個 Process 中會有很多個 Thread ，每一個 Thread 負責某一項功能
+以下條列幾點 Thread 的觀念 —
+
+同一個 Process 會同時存在多個 Thread。
+同一個 Process 底下的 Thread 共享資源，如 記憶體、變數等，不同的Process 則否。
+在多執行緒中(Multithreading)，兩個執行緒若同時存取或改變全域變數(Global Variable)，則可能發生同步(Synchronization，恐龍本第六章)問題。若執行緒之間互搶資源，則可能產生死結
+thread 會將變數保存在記憶體空間中，稱作 stack
+
+process 是 OS 分配資源的最小單位，而 thread 則是作業系統能夠進行運算排程的最小單位，也就是說實際執行任務的並不是進程，而是進程中的線程
+
+process/thread pool
+進（線）程池：預先建立好，帶有一堆進程的隊列，有需要時就進去拿，而不用重新建立，以此增加效能並減少執行時的延遲。
+之所以要開多個 process 或 thread 常是因為要「並行運算」或做 I/o 處理
+透過進程池可以幫助我們管理 process，並減少建立和結束 process 的資源消耗
+同一個時間下，一個進程只會被分配到一顆 CPU 工作，假設進程池設 4 個，但只有一個 CPU，那基本上同一時間內最多只會有一個進程在工作
+
+cpu scheduling
+1. fifo: 先來先做
+2. sjf : 所需執行時間越少越優先
+3. round robin: 所有process皆使用固定的執行時間，超過此時間跳入下一個process等待下次循環
+
+
+
+記憶體管理
+Contiguous Memory Allocation可以又可以分為兩種
+
+Fixed-partition: 把每個類型的程式所需要的記憶體都先切好存放的位置，一但程式被執行起來要load進記憶體的時候就直接放進去相對應類行的空間。比較舊也相對單純的方法，方便實作且容易理解。
+Variable-size:以動態的方式去決定Proess要被放進去哪個記憶體空間，程式被執行起來load進記憶體的時候才開始找一個夠大的空間塞進去。比較複雜，但可以節省更多的記憶體空間。
+找記憶體空間放進去的方法又分為三種
+
+First-fit : 第一個找到空間夠大的就放進去
+Best-fit : 只找到大小剛好的或者最小卻剛好夠的，但可能會有壞處就是造成了剩下一點小小的別人也無法使用
+Worst-fit : 找空間最大的記憶體區段來放入
+比較多人使用First-fit來搜索記憶體空間，因為Best-fit和Worst-fit在尋找的複雜度是很高的，First-fit相對快速且單純。
+
+
+Fragmentation
+當我們在配置記憶體給Process時，並不會配得剛剛好，會是以一個單位一個單位的大小在配置空間，那這樣的情況下，記憶體空間一定會有浪費，Fragmentation指的就是被浪費掉的零碎的空間:
+
+External fragmentation: 在程式外面的空間夠多，但卻沒有一個夠大去融入下一個Process的狀況，會發生在variable-size allocation的情況下。
+Internal fragmentation: 切給proess的memory不一定會全部用完，在fixed-size allication的情況下發生。
+
+Non-Contiguous Memory Allocation
+Non-Contiguous的概念下，每個Process所使用的記憶體是凌亂的分布在記憶體的區段之中，其中有一套機制去為每個Process管理其記憶體，其中最關鍵的是有一個Hash Table(Page Table)，去儲存logical address 與 physical address的對應關係。
+
+這麼做就會有許多的好處
+
+使用者以為空間是連續的，實際上是non-contiguous的。
+透過這樣子的映射關係，可以實作Share memory讓Process交換資料，以及dynmaic linking去使用同一個library。
