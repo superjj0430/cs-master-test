@@ -479,7 +479,7 @@ Non-Contiguous的概念下，每個Process所使用的記憶體是凌亂的分�
 segmentation paging的意義:
 1. 程式由許多segments組成，segment再以page進行memory allocation降低外部破碎
 
-
+分頁分段參考:http://hen05133.blogspot.com/2010/01/blog-post_25.html
 
 虛擬記憶體
 
