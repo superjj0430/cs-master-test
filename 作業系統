@@ -475,3 +475,56 @@ Non-Contiguous的概念下，每個Process所使用的記憶體是凌亂的分�
 
 使用者以為空間是連續的，實際上是non-contiguous的。
 透過這樣子的映射關係，可以實作Share memory讓Process交換資料，以及dynmaic linking去使用同一個library。
+
+segmentation paging的意義:
+1. 程式由許多segments組成，segment再以page進行memory allocation降低外部破碎
+
+
+
+虛擬記憶體
+
+虛擬記憶體 (Virtual Memory) 會讓應用程式認為其擁有連續可用的記憶體（一個連續完整的位址空間），而實際上，其通常是被分隔成多個實體記憶體碎片，還有部分暫時儲存在外部磁碟記憶體上，需要時才進行資料交換。
+
+優點：
+
+允許程式大小大於實體記憶體 (physical memory) 大小情況下，程式仍然能執行。 
+OS 的負擔，程式設計師無負擔。
+記憶體的各個小空間皆有機會被利用到，記憶體使用度上升。
+提高 multiprogramming degree，提昇 CPU 使用度。
+每一次的 I/O transfer time 下降，因為不用將整個程式的所有 page 載入。(然而載入整個程式很耗費 I/O transfer time，因為總傳輸次數變多。)
+
+
+實現 Virtual Memory 方法：Demand Paging
+
+以 paging 為基礎，採用 lazy swapper 技巧。即程式執行之初不將全部的 pages 載入 memory，僅載入執行所須的 pages，如要處理 page fault 問題，由 OS 另行處理。
+當 page fault 發生且 memory 無可用 page 時，則 OS 必須執行 page replacement。OS 必須選擇一個 victim page，將其 swap out 到 disk 來空出一個可用 frame，再將 lost page swap in 到此 frame。
+
+
+Thrashing 現象：
+
+若 Process 分配到的 frame 不足，則會經常發生 page fault，此時必須執行 page replacement。
+若採用 global replacement policy，則此 process 會替換其它 process 的 page 以空出 frame，造成其它 process 也會發生 page fault，而這些 process 也會去搶其它 process 的 frame，造成所有 process 皆在處理 page fault。
+所有 process 皆忙於 swap in/out，造成 CPU idle。(CPU idle 時 OS 會企圖引進更多的 process 進入系統讓 Thrashing 現象更嚴重。)
+
+Thrashing的解決方法：
+
+1. 降低 multiprogramming degree
+
+2. 利用 page fault ratio 控制來防止 thrashing
+3. 利用 working set model
+
+
+
+磁碟管理
+raid種類
+RAID 0：
+RAID 0通常稱為條帶化（Striping），它將數據均勻地分散存儲在兩個或更多的硬碟上，通過同時存取多個硬碟提高數據讀寫性能。RAID 0具有較高的讀寫速度，但沒有容錯能力，如果一個硬碟失效，則所有存儲在RAID 0陣列中的數據都將丟失。
+
+RAID 1：
+RAID 1被稱為鏡像（Mirroring），它使用兩個硬碟將數據重複地存儲在兩個硬碟上，提供了數據的冗餘備份。RAID 1具有優秀的容錯能力，即使一個硬碟失效，數據仍然可以通過另一個硬碟還原。然而，RAID 1的實際容量只是硬碟容量的一半。
+
+RAID 5：
+RAID 5組合了條帶化和分佈式奇偶校驗（Distributed Parity）的特點。它將數據進行條帶化存儲，同時使用奇偶校驗位來提供容錯能力。RAID 5至少需要三個硬碟，並且可以容忍一個硬碟的失效。當一個硬碟失效時，RAID 5可以通過奇偶校驗位重建失效的數據。RAID 5提供了良好的讀取性能，但寫入性能稍低。
+
+RAID 6：
+RAID 6在RAID 5的基礎上添加了第二個奇偶校驗位，提供更高的容錯能力。RAID 6至少需要四個硬碟，可以容忍兩個硬碟的同時失效。RAID 6提供了良好的容錯能力和數據保護，但相對於RAID 5，寫入性能稍低。
